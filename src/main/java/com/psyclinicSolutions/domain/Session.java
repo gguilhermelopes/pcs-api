@@ -1,4 +1,4 @@
-package domain;
+package com.psyclinicSolutions.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,14 +26,14 @@ public class Session {
     @ManyToOne
     @JoinColumn(name = "therapist_id", nullable = false)
     private Therapist therapist;
-    private Instant date;
-    private Integer duration;
+    private Instant sessionDate;
+    private Integer sessionDuration;
     private Boolean isRemote;
     private Boolean isAuthorized;
-    private List<String> authorization = new ArrayList<>();
+    private List<String> token = new ArrayList<>();
     private Instant authorizationDate;
     private Boolean hasPatientAttended;
-    private Double value;
+    private Double sessionValue;
     private Boolean isPaid;
     private Instant paymentDate;
     private Boolean isAccounted;

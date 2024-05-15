@@ -1,6 +1,6 @@
-package repositories;
+package com.psyclinicSolutions.repositories;
 
-import domain.Therapist;
+import com.psyclinicSolutions.domain.Therapist;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
