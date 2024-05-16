@@ -22,6 +22,7 @@ public class Therapist {
     private UUID id;
     private String name;
     private String email;
+    private String crp;
     private String address;
     private String phone;
     private String cellphone;
