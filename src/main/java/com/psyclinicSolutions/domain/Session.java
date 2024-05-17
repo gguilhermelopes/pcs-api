@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -30,7 +28,7 @@ public class Session {
     private Integer sessionDuration;
     private Boolean isRemote;
     private Boolean isAuthorized;
-    private List<String> token = new ArrayList<>();
+    private String token;
     private Instant authorizationDate;
     private Boolean hasPatientAttended;
     private Double sessionValue;

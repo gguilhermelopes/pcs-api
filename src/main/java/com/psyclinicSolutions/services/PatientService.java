@@ -23,17 +23,17 @@ public class PatientService {
 
     @Autowired
     private PatientRepository repository;
-
+    @Transactional(readOnly = true)
     public List<PatientDTO> findAll() {
         List<Patient> list = repository.findAll();
         return list.stream().map(PatientDTO::new).toList();
     }
-
+    @Transactional(readOnly = true)
     public Page<PatientDTO> findAllPaged(Pageable pageable) {
         Page<Patient> pagedList = repository.findAll(pageable);
         return pagedList.map(PatientDTO::new);
     }
-
+    @Transactional(readOnly = true)
     public PatientDTO findById(UUID id) {
         Optional<Patient> obj = repository.findById(id);
         Patient entity = obj.orElseThrow(() -> new DataNotFoundException("Funcionário não encontrado."));
@@ -84,7 +84,6 @@ public class PatientService {
         entity.setEmergencyContact(data.emergencyContact());
         entity.setEmergencyContactPhone(data.emergencyContactPhone());
         entity.setRecords(data.records());
-
     }
 
 

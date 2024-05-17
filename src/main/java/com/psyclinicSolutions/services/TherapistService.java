@@ -24,16 +24,19 @@ public class TherapistService {
     @Autowired
     private TherapistRepository repository;
 
+    @Transactional(readOnly = true)
     public List<TherapistDTO> findAll() {
         List<Therapist> list = repository.findAll();
         return list.stream().map(TherapistDTO::new).toList();
     }
 
+    @Transactional(readOnly = true)
     public Page<TherapistDTO> findAllPaged(Pageable pageable) {
         Page<Therapist> pagedList = repository.findAll(pageable);
         return pagedList.map(TherapistDTO::new);
     }
 
+    @Transactional(readOnly = true)
     public TherapistDTO findById(UUID id) {
         Optional<Therapist> obj = repository.findById(id);
         Therapist entity = obj.orElseThrow(() -> new DataNotFoundException("Terapeuta não encontrado."));

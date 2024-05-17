@@ -8,9 +8,10 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CNPJ;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public record InsuranceDTO(
         UUID id,
@@ -36,7 +37,7 @@ public record InsuranceDTO(
         @NotBlank(message = "Telefone é obrigatório.")
         String phone,
         String cellphone,
-        Set<Patient> patients
+        Set<PatientSimplifiedDTO> patients
        ) {
 
     public InsuranceDTO(Insurance entity){
@@ -49,21 +50,9 @@ public record InsuranceDTO(
                 entity.getAddress(),
                 entity.getPhone(),
                 entity.getCellphone(),
-                Set.of()
+                new HashSet<>(entity.getPatients().stream().map(PatientSimplifiedDTO::new).collect(Collectors.toList()))
         );
     }
 
-    public InsuranceDTO(Insurance entity, Set<Patient> patients){
-        this(
-                entity.getId(),
-                entity.getName(),
-                entity.getCnpj(),
-                entity.getContact(),
-                entity.getEmail(),
-                entity.getAddress(),
-                entity.getPhone(),
-                entity.getCellphone(),
-                Set.of()
-        );
-    }
+
 }

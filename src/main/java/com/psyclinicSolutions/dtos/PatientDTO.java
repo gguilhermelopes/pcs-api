@@ -7,11 +7,17 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.hibernate.validator.constraints.br.CPF;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public record PatientDTO(
         UUID id,
+        UUID therapistId,
+        String therapist,
+        UUID insuranceId,
+        String insurance,
         @NotNull(message = "Nome é obrigatório.")
         @NotBlank(message = "Nome é obrigatório.")
         @Size(min = 3, message = "Nome tem que ter mais de 3 caracteres.")
@@ -42,13 +48,16 @@ public record PatientDTO(
         @NotNull(message = "Função é obrigatória.")
         @NotBlank(message = "Função é obrigatória.")
         String records,
-        Set<Session> sessions
-
+        Set<SessionDTO> sessions
        ) {
 
     public PatientDTO(Patient entity){
         this(
                 entity.getId(),
+                entity.getTherapist().getId(),
+                entity.getTherapist().getName(),
+                entity.getInsurance().getId(),
+                entity.getInsurance().getName(),
                 entity.getName(),
                 entity.getImgUrl(),
                 entity.getCpf(),
@@ -59,8 +68,7 @@ public record PatientDTO(
                 entity.getEmergencyContact(),
                 entity.getEmergencyContactPhone(),
                 entity.getRecords(),
-                Set.of()
-
+                new HashSet<>(entity.getSessions().stream().map(SessionDTO::new).collect(Collectors.toSet()))
         );
     }
 }

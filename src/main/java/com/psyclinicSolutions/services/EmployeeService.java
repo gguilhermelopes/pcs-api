@@ -23,17 +23,17 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepository repository;
-
+    @Transactional(readOnly = true)
     public List<EmployeeDTO> findAll() {
         List<Employee> list = repository.findAll();
         return list.stream().map(EmployeeDTO::new).toList();
     }
-
+    @Transactional(readOnly = true)
     public Page<EmployeeDTO> findAllPaged(Pageable pageable) {
         Page<Employee> pagedList = repository.findAll(pageable);
         return pagedList.map(EmployeeDTO::new);
     }
-
+    @Transactional(readOnly = true)
     public EmployeeDTO findById(UUID id) {
         Optional<Employee> obj = repository.findById(id);
         Employee entity = obj.orElseThrow(() -> new DataNotFoundException("Funcionário não encontrado."));

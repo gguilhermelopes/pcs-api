@@ -24,16 +24,19 @@ public class InsuranceService {
     @Autowired
     private InsuranceRepository repository;
 
+    @Transactional(readOnly = true)
     public List<InsuranceDTO> findAll() {
         List<Insurance> list = repository.findAll();
         return list.stream().map(InsuranceDTO::new).toList();
     }
 
+    @Transactional(readOnly = true)
     public Page<InsuranceDTO> findAllPaged(Pageable pageable) {
         Page<Insurance> pagedList = repository.findAll(pageable);
         return pagedList.map(InsuranceDTO::new);
     }
 
+    @Transactional(readOnly = true)
     public InsuranceDTO findById(UUID id) {
         Optional<Insurance> obj = repository.findById(id);
         Insurance entity = obj.orElseThrow(() -> new DataNotFoundException("Seguro não encontrado."));

@@ -8,8 +8,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public record TherapistDTO(
         UUID id,
@@ -34,8 +36,8 @@ public record TherapistDTO(
         @NotNull(message = "Especialização é obrigatória.")
         @NotBlank(message = "Especialização é obrigatória")
         String expertise,
-        Set<Patient> patients,
-        Set<Session> sessions
+        Set<PatientSimplifiedDTO> patients,
+        Set<SessionDTO> sessions
        ) {
 
     public TherapistDTO(Therapist entity){
@@ -48,8 +50,8 @@ public record TherapistDTO(
                 entity.getPhone(),
                 entity.getCellphone(),
                 entity.getExpertise(),
-                Set.of(),
-                Set.of()
+                new HashSet<>(entity.getPatients().stream().map(PatientSimplifiedDTO::new).collect(Collectors.toSet())),
+                new HashSet<>(entity.getSessions().stream().map(SessionDTO::new).collect(Collectors.toSet()))
         );
     }
 }
