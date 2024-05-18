@@ -6,6 +6,7 @@ import com.psyclinicSolutions.domain.Therapist;
 import com.psyclinicSolutions.dtos.SessionDTO;
 import com.psyclinicSolutions.infra.exceptions.DataNotFoundException;
 import com.psyclinicSolutions.infra.exceptions.DatabaseException;
+import com.psyclinicSolutions.infra.helpers.FetchObjects;
 import com.psyclinicSolutions.repositories.PatientRepository;
 import com.psyclinicSolutions.repositories.SessionRepository;
 import com.psyclinicSolutions.repositories.TherapistRepository;
@@ -33,6 +34,8 @@ public class SessionService {
     private TherapistRepository therapistRepository;
     @Autowired
     private PatientRepository patientRepository;
+    @Autowired
+    private FetchObjects fo;
 
     @Transactional(readOnly = true)
     public List<SessionDTO> findAll() {
@@ -85,8 +88,8 @@ public class SessionService {
     }
 
     private void dataToSession(SessionDTO data, Session entity) {
-       Therapist therapist = fetchObject(data.therapistId(), therapistRepository);
-       Patient patient = fetchObject(data.patientId(), patientRepository);
+       Therapist therapist = fo.fetchObject(data.therapistId(), therapistRepository);
+       Patient patient = fo.fetchObject(data.patientId(), patientRepository);
 
        entity.setTherapist(therapist);
        entity.setPatient(patient);
@@ -104,10 +107,7 @@ public class SessionService {
        entity.setAccountDate(data.accountDate());
     }
 
-    private <T> T fetchObject(UUID id, JpaRepository<T, UUID> repository){
-       return repository.findById(id).
-               orElseThrow(() -> new DataNotFoundException("Entidade " + repository.getClass().getName() + " não encontrada." ));
-    }
+
 
 
 

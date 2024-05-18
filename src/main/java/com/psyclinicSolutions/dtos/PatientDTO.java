@@ -1,10 +1,7 @@
 package com.psyclinicSolutions.dtos;
 
 import com.psyclinicSolutions.domain.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.util.HashSet;
@@ -14,8 +11,10 @@ import java.util.stream.Collectors;
 
 public record PatientDTO(
         UUID id,
+        @NotNull(message = "Terapeuta é obrigatório")
         UUID therapistId,
         String therapist,
+        @NotNull(message = "Plano de saúde é obrigatório")
         UUID insuranceId,
         String insurance,
         @NotNull(message = "Nome é obrigatório.")

@@ -1,10 +1,15 @@
 package com.psyclinicSolutions.services;
 
+import com.psyclinicSolutions.domain.Insurance;
 import com.psyclinicSolutions.domain.Patient;
+import com.psyclinicSolutions.domain.Therapist;
 import com.psyclinicSolutions.dtos.PatientDTO;
 import com.psyclinicSolutions.infra.exceptions.DataNotFoundException;
 import com.psyclinicSolutions.infra.exceptions.DatabaseException;
+import com.psyclinicSolutions.infra.helpers.FetchObjects;
+import com.psyclinicSolutions.repositories.InsuranceRepository;
 import com.psyclinicSolutions.repositories.PatientRepository;
+import com.psyclinicSolutions.repositories.TherapistRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,6 +28,13 @@ public class PatientService {
 
     @Autowired
     private PatientRepository repository;
+
+    @Autowired
+    private TherapistRepository therapistRepository;
+    @Autowired
+    private InsuranceRepository insuranceRepository;
+    @Autowired
+    private FetchObjects fo;
     @Transactional(readOnly = true)
     public List<PatientDTO> findAll() {
         List<Patient> list = repository.findAll();
@@ -36,7 +48,7 @@ public class PatientService {
     @Transactional(readOnly = true)
     public PatientDTO findById(UUID id) {
         Optional<Patient> obj = repository.findById(id);
-        Patient entity = obj.orElseThrow(() -> new DataNotFoundException("Funcionário não encontrado."));
+        Patient entity = obj.orElseThrow(() -> new DataNotFoundException("Paciente não encontrado."));
 
         return new PatientDTO(entity);
     }
@@ -45,10 +57,10 @@ public class PatientService {
     public PatientDTO insert(PatientDTO data) {
         Patient entity = new Patient();
         dataToPatient(data, entity);
-        entity = repository.save(entity);
-
-        return new PatientDTO(entity);
+            entity = repository.save(entity);
+            return new PatientDTO(entity);
     }
+
     @Transactional
     public PatientDTO update(UUID id, PatientDTO data) {
         try{
@@ -57,14 +69,14 @@ public class PatientService {
             obj = repository.save(obj);
             return new PatientDTO(obj);
         } catch (EntityNotFoundException exception){
-            throw new DataNotFoundException("Funcionário não encontrado");
+            throw new DataNotFoundException("Paciente não encontrado");
         }
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
     public void delete(UUID id) {
         if(!repository.existsById(id)){
-            throw new DataNotFoundException("Funcionário não encontrado.");
+            throw new DataNotFoundException("Paciente não encontrado.");
         }
         try{
             repository.deleteById(id);
@@ -74,7 +86,12 @@ public class PatientService {
     }
 
     private void dataToPatient(PatientDTO data, Patient entity) {
+        Therapist therapist = fo.fetchObject(data.therapistId(), therapistRepository);
+        Insurance insurance = fo.fetchObject(data.insuranceId(), insuranceRepository);
+
         entity.setName(data.name());
+        entity.setTherapist(therapist);
+        entity.setInsurance(insurance);
         entity.setImgUrl(data.imgUrl());
         entity.setCpf(data.cpf());
         entity.setEmail(data.email());
