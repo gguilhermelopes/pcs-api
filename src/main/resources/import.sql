@@ -1,13 +1,18 @@
 INSERT INTO therapist (id, name, email, crp, address, phone, cellphone, expertise) VALUES ('123e4567-e89b-12d3-a456-426614174000', 'Dr. João Silva', 'dr.joao.silva@example.com', '1234567890', 'Rua das Flores, 100', '(11) 98765-4321', '(11) 9 8765-4321', 'Psicologia');
 INSERT INTO therapist (id, name, email, crp, address, phone, cellphone, expertise) VALUES ('123e4567-e89b-12d3-a456-426614174001', 'Dr. Maria Oliveira', 'dr.maria.oliveira@example.com', '2345678901', 'Avenida dos Pinheiros, 200', '(22) 76543-2109', '(22) 7 6543-2109', 'Psiquiatria');
 
-
 INSERT INTO insurance (id, name, cnpj, contact, email, address, phone, cellphone) VALUES ('123e4567-e89b-12d3-a456-426614174002', 'Seguro Saúde ABC', '00.000.000/0001-10', 'contato@seguroabc.com.br', 'seguro@seguroabc.com.br', 'Av. das Nações Unidas, 300', '(11) 12345-6789', '(11) 9 1234-5678');
 INSERT INTO insurance (id, name, cnpj, contact, email, address, phone, cellphone) VALUES ('123e4567-e89b-12d3-a456-426614174003', 'Seguro Dental XYZ', '11.111.111/1111-11', 'contato@seguroltdx.com.br', 'info@seguroltdx.com.br', 'R. das Palmeiras, 400', '(22) 54321-0987', '(22) 5 4321-0987');
 
+INSERT INTO role (id, authority) VALUES ('123e4567-e89b-12d3-a456-426614174010', 'ROLE_ADMIN');
+INSERT INTO role (id, authority) VALUES ('123e4567-e89b-12d3-a456-426614174011', 'ROLE_USER');
 
-INSERT INTO employee (id, name, img_url, cpf, email, address, phone, cellphone, emergency_contact, emergency_contact_phone, role) VALUES ('123e4567-e89b-12d3-a456-426614174102', 'João Silva', 'https://example.com/joaosilva.jpg', '123.456.789-01', 'joaosilva@example.com', 'Rua das Flores, 100', '(11) 98765-4321', '(11) 9 8765-4321', 'Maria Silva', '(11) 98765-4322', 'Terapeuta');
-INSERT INTO employee (id, name, img_url, cpf, email, address, phone, cellphone, emergency_contact, emergency_contact_phone, role) VALUES ('123e4567-e89b-12d3-a456-426614174101', 'Ana Oliveira', 'https://example.com/anooliveira.jpg', '234.567.890-23', 'anooliveira@example.com', 'Avenida dos Pinheiros, 200', '(22) 76543-2109', '(22) 7 6543-2109', 'Carlos Pereira', '(22) 76543-2110', 'Assistente');
+
+INSERT INTO tb_user (id, name, email, password, role_id) VALUES ('123e4567-e89b-12d3-a456-426614175000', 'João Silva', 'joaosilva@example.com', '123456', '123e4567-e89b-12d3-a456-426614174010');
+INSERT INTO tb_user(id, name, email, password, role_id) VALUES ('123e4567-e89b-12d3-a456-426614175001', 'Ana Oliveira', 'anooliveira@example.com', '123456', '123e4567-e89b-12d3-a456-426614174011');
+
+INSERT INTO employee (id, user_id, name, img_url, cpf, email, address, phone, cellphone, emergency_contact, emergency_contact_phone, role) VALUES ('123e4567-e89b-12d3-a456-426614174102', '123e4567-e89b-12d3-a456-426614175000', 'João Silva', 'https://example.com/joaosilva.jpg', '123.456.789-01', 'joaosilva@example.com', 'Rua das Flores, 100', '(11) 98765-4321', '(11) 9 8765-4321', 'Maria Silva', '(11) 98765-4322', 'Terapeuta');
+INSERT INTO employee (id, user_id, name, img_url, cpf, email, address, phone, cellphone, emergency_contact, emergency_contact_phone, role) VALUES ('123e4567-e89b-12d3-a456-426614174101', '123e4567-e89b-12d3-a456-426614175001', 'Ana Oliveira', 'https://example.com/anooliveira.jpg', '234.567.890-23', 'anooliveira@example.com', 'Avenida dos Pinheiros, 200', '(22) 76543-2109', '(22) 7 6543-2109', 'Carlos Pereira', '(22) 76543-2110', 'Assistente');
 
 
 INSERT INTO patient (id, therapist_id, insurance_id, name, img_url, cpf, email, address, phone, cellphone, emergency_contact, emergency_contact_phone, records) VALUES ('123e4567-e89b-12d3-a456-426614174004', '123e4567-e89b-12d3-a456-426614174000', '123e4567-e89b-12d3-a456-426614174002', 'Pedro Santos', 'https://example.com/pedrosantos.jpg', '345.678.901-34', 'pedrosantos@example.com', 'Rua das Oliveiras, 500', '(11) 99876-5432', '(11) 9 8876-5432', 'Maria Santos', '(11) 99876-5433', 'Paciente com histórico de...');
@@ -23,3 +28,6 @@ INSERT INTO session (id, patient_id, therapist_id, session_date, session_duratio
 INSERT INTO session (id, patient_id, therapist_id, session_date, session_duration, is_remote, is_authorized, token, authorization_date, has_patient_attended, session_value, is_paid, payment_date, is_accounted, account_date) VALUES ('123e4567-e89b-12d3-a456-426614174013','123e4567-e89b-12d3-a456-426614174007','123e4567-e89b-12d3-a456-426614174000','2023-04-19',60,true,true,'token126','2023-04-18',true,55.0,true,'2023-04-20',true,'2023-04-21');
 INSERT INTO session (id, patient_id, therapist_id, session_date, session_duration, is_remote, is_authorized, token, authorization_date, has_patient_attended, session_value, is_paid, payment_date, is_accounted, account_date) VALUES ('123e4567-e89b-12d3-a456-426614174014','123e4567-e89b-12d3-a456-426614174008','123e4567-e89b-12d3-a456-426614174000','2023-04-20',45,false,true,'token127','2023-04-19',true,45.0,true,'2023-04-21',true,'2023-04-22');
 INSERT INTO session (id, patient_id, therapist_id, session_date, session_duration, is_remote, is_authorized, token, authorization_date, has_patient_attended, session_value, is_paid, payment_date, is_accounted, account_date) VALUES ('123e4567-e89b-12d3-a456-426614174015','123e4567-e89b-12d3-a456-426614174009','123e4567-e89b-12d3-a456-426614174001','2023-04-21',30,true,true,'token128','2023-04-20',true,30.0,true,'2023-04-22',true,'2023-04-23');
+
+
+

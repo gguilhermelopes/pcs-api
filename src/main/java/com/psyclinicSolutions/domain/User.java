@@ -1,35 +1,28 @@
 package com.psyclinicSolutions.domain;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
 
 @Entity
-@Table(name = "employee")
+@Table(name = "tb_user")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Employee {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @EqualsAndHashCode.Include
     private UUID id;
     private String name;
-    private String imgUrl;
-    private String cpf;
     private String email;
-    private String address;
-    private String phone;
-    private String cellphone;
-    private String emergencyContact;
-    private String emergencyContactPhone;
-    private String role;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    
+    private String password;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
+    @OneToOne(mappedBy = "user")
+    private Employee employee;
 }
