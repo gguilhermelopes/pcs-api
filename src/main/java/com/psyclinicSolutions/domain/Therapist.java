@@ -22,6 +22,7 @@ public class Therapist {
     private UUID id;
     private String name;
     private String email;
+    @Column(unique = true)
     private String crp;
     private String address;
     private String phone;

@@ -6,7 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -16,6 +17,6 @@ import java.util.Map;
 public class ValidationException {
     private Instant timestamp;
     private Integer status;
-    private Map<String, String> errors = new HashMap<>();
+    private List<Map<String, String>> errors = new ArrayList<>();
     private String path;
 }

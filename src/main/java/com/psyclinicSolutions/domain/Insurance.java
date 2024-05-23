@@ -21,6 +21,7 @@ public class Insurance {
     @EqualsAndHashCode.Include
     private UUID id;
     private String name;
+    @Column(unique = true)
     private String cnpj;
     private String contact;
     private String email;

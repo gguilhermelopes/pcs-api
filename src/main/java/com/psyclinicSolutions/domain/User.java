@@ -18,6 +18,7 @@ public class User {
     @EqualsAndHashCode.Include
     private UUID id;
     private String name;
+    @Column(unique = true)
     private String email;
     private String password;
     @ManyToOne(fetch = FetchType.EAGER)

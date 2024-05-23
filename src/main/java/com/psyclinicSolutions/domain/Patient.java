@@ -28,6 +28,7 @@ public class Patient {
     private Insurance insurance;
     private String name;
     private String imgUrl;
+    @Column(unique = true)
     private String cpf;
     private String email;
     private String address;
