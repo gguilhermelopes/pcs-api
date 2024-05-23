@@ -1,7 +1,7 @@
 package com.psyclinicSolutions.services;
 
 import com.psyclinicSolutions.domain.Employee;
-import com.psyclinicSolutions.dtos.EmployeeDTO;
+import com.psyclinicSolutions.dto.EmployeeDTO;
 import com.psyclinicSolutions.infra.exceptions.DataNotFoundException;
 import com.psyclinicSolutions.infra.exceptions.DatabaseException;
 import com.psyclinicSolutions.repositories.EmployeeRepository;

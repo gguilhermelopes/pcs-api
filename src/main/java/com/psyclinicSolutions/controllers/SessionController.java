@@ -1,6 +1,6 @@
 package com.psyclinicSolutions.controllers;
 
-import com.psyclinicSolutions.dtos.SessionDTO;
+import com.psyclinicSolutions.dto.SessionDTO;
 import com.psyclinicSolutions.services.SessionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

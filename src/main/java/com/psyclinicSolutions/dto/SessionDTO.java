@@ -1,9 +1,6 @@
-package com.psyclinicSolutions.dtos;
+package com.psyclinicSolutions.dto;
 
-import com.psyclinicSolutions.domain.Patient;
 import com.psyclinicSolutions.domain.Session;
-import com.psyclinicSolutions.domain.Therapist;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.Instant;

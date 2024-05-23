@@ -28,8 +28,4 @@ public class Employee {
     private String emergencyContact;
     private String emergencyContactPhone;
     private String role;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-    
 }

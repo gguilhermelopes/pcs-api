@@ -1,4 +1,4 @@
-package com.psyclinicSolutions.dtos;
+package com.psyclinicSolutions.dto;
 
 import com.psyclinicSolutions.domain.Employee;
 import jakarta.validation.constraints.Email;

@@ -3,7 +3,7 @@ package com.psyclinicSolutions.services;
 import com.psyclinicSolutions.domain.Insurance;
 import com.psyclinicSolutions.domain.Patient;
 import com.psyclinicSolutions.domain.Therapist;
-import com.psyclinicSolutions.dtos.PatientDTO;
+import com.psyclinicSolutions.dto.PatientDTO;
 import com.psyclinicSolutions.infra.exceptions.DataNotFoundException;
 import com.psyclinicSolutions.infra.exceptions.DatabaseException;
 import com.psyclinicSolutions.infra.helpers.FetchObjects;
@@ -35,6 +35,7 @@ public class PatientService {
     private InsuranceRepository insuranceRepository;
     @Autowired
     private FetchObjects fo;
+
     @Transactional(readOnly = true)
     public List<PatientDTO> findAll() {
         List<Patient> list = repository.findAll();

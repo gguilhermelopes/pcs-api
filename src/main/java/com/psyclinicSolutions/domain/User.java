@@ -20,9 +20,8 @@ public class User {
     private String name;
     private String email;
     private String password;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
-    @OneToOne(mappedBy = "user")
-    private Employee employee;
+
 }

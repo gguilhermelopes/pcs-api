@@ -1,7 +1,7 @@
 package com.psyclinicSolutions.services;
 
 import com.psyclinicSolutions.domain.Insurance;
-import com.psyclinicSolutions.dtos.InsuranceDTO;
+import com.psyclinicSolutions.dto.InsuranceDTO;
 import com.psyclinicSolutions.infra.exceptions.DataNotFoundException;
 import com.psyclinicSolutions.infra.exceptions.DatabaseException;
 import com.psyclinicSolutions.repositories.InsuranceRepository;

@@ -1,7 +1,7 @@
 package com.psyclinicSolutions.services;
 
 import com.psyclinicSolutions.domain.Therapist;
-import com.psyclinicSolutions.dtos.TherapistDTO;
+import com.psyclinicSolutions.dto.TherapistDTO;
 import com.psyclinicSolutions.infra.exceptions.DataNotFoundException;
 import com.psyclinicSolutions.infra.exceptions.DatabaseException;
 import com.psyclinicSolutions.repositories.TherapistRepository;
