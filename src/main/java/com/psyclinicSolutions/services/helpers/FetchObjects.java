@@ -1,4 +1,4 @@
-package com.psyclinicSolutions.infra.helpers;
+package com.psyclinicSolutions.services.helpers;
 
 import com.psyclinicSolutions.infra.exceptions.DataNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;

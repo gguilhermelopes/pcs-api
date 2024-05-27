@@ -6,7 +6,7 @@ import com.psyclinicSolutions.domain.Therapist;
 import com.psyclinicSolutions.dto.SessionDTO;
 import com.psyclinicSolutions.infra.exceptions.DataNotFoundException;
 import com.psyclinicSolutions.infra.exceptions.DatabaseException;
-import com.psyclinicSolutions.infra.helpers.FetchObjects;
+import com.psyclinicSolutions.services.helpers.FetchObjects;
 import com.psyclinicSolutions.repositories.PatientRepository;
 import com.psyclinicSolutions.repositories.SessionRepository;
 import com.psyclinicSolutions.repositories.TherapistRepository;

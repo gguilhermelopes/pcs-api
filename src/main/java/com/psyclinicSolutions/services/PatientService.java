@@ -6,7 +6,7 @@ import com.psyclinicSolutions.domain.Therapist;
 import com.psyclinicSolutions.dto.PatientDTO;
 import com.psyclinicSolutions.infra.exceptions.DataNotFoundException;
 import com.psyclinicSolutions.infra.exceptions.DatabaseException;
-import com.psyclinicSolutions.infra.helpers.FetchObjects;
+import com.psyclinicSolutions.services.helpers.FetchObjects;
 import com.psyclinicSolutions.repositories.InsuranceRepository;
 import com.psyclinicSolutions.repositories.PatientRepository;
 import com.psyclinicSolutions.repositories.TherapistRepository;
@@ -103,7 +103,4 @@ public class PatientService {
         entity.setEmergencyContactPhone(data.emergencyContactPhone());
         entity.setRecords(data.records());
     }
-
-
-
 }

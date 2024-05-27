@@ -25,4 +25,7 @@ public class User {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    public boolean hasRole(String authority) {
+        return this.role.getAuthority().equals(authority);
+    }
 }

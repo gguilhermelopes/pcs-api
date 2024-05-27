@@ -6,7 +6,7 @@ import com.psyclinicSolutions.dto.UserDTO;
 import com.psyclinicSolutions.dto.UserInsertDTO;
 import com.psyclinicSolutions.infra.exceptions.DataNotFoundException;
 import com.psyclinicSolutions.infra.exceptions.DatabaseException;
-import com.psyclinicSolutions.infra.helpers.FetchObjects;
+import com.psyclinicSolutions.services.helpers.FetchObjects;
 import com.psyclinicSolutions.repositories.RoleRepository;
 import com.psyclinicSolutions.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
