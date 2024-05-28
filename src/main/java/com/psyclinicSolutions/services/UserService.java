@@ -11,9 +11,13 @@ import com.psyclinicSolutions.repositories.RoleRepository;
 import com.psyclinicSolutions.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,13 +28,14 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository repository;
     @Autowired
     private RoleRepository roleRepository;
     @Autowired
+    @Lazy
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
@@ -103,5 +108,14 @@ public class UserService {
         entity.setEmail(data.email());
         entity.setPassword(passwordEncoder.encode(data.password()));
         entity.setRole(role);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = repository.findByEmail(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("Usuário não encontrado.");
+        }
+        return user;
     }
 }

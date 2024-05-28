@@ -8,8 +8,8 @@ INSERT INTO role (id, authority) VALUES ('123e4567-e89b-12d3-a456-426614174010',
 INSERT INTO role (id, authority) VALUES ('123e4567-e89b-12d3-a456-426614174011', 'ROLE_USER');
 
 
-INSERT INTO tb_user (id, name, email, password, role_id) VALUES ('123e4567-e89b-12d3-a456-426614175000', 'João Silva', 'joaosilva@example.com', '123456', '123e4567-e89b-12d3-a456-426614174010');
-INSERT INTO tb_user (id, name, email, password, role_id) VALUES ('123e4567-e89b-12d3-a456-426614175001', 'Ana Oliveira', 'anooliveira@example.com', '123456', '123e4567-e89b-12d3-a456-426614174011');
+INSERT INTO tb_user (id, name, email, password, role_id, is_active) VALUES ('123e4567-e89b-12d3-a456-426614175000', 'João Silva', 'joaosilva@example.com', '$2a$12$m3EeyXWR8uSX0VUYFTHfle9N4on8q0q/25CByNYxECLYPg8r1mlse', '123e4567-e89b-12d3-a456-426614174010', true);
+INSERT INTO tb_user (id, name, email, password, role_id, is_active) VALUES ('123e4567-e89b-12d3-a456-426614175001', 'Ana Oliveira', 'anooliveira@example.com', '$2a$12$m3EeyXWR8uSX0VUYFTHfle9N4on8q0q/25CByNYxECLYPg8r1mlse', '123e4567-e89b-12d3-a456-426614174011', true);
 
 INSERT INTO employee (id, name, img_url, cpf, email, address, phone, cellphone, emergency_contact, emergency_contact_phone, role) VALUES ('123e4567-e89b-12d3-a456-426614174102', 'João Silva', 'https://example.com/joaosilva.jpg', '123.456.789-01', 'joaosilva@example.com', 'Rua das Flores, 100', '(11) 98765-4321', '(11) 9 8765-4321', 'Maria Silva', '(11) 98765-4322', 'Terapeuta');
 INSERT INTO employee (id, name, img_url, cpf, email, address, phone, cellphone, emergency_contact, emergency_contact_phone, role) VALUES ('123e4567-e89b-12d3-a456-426614174101', 'Ana Oliveira', 'https://example.com/anooliveira.jpg', '234.567.890-23', 'anooliveira@example.com', 'Avenida dos Pinheiros, 200', '(22) 76543-2109', '(22) 7 6543-2109', 'Carlos Pereira', '(22) 76543-2110', 'Assistente');
