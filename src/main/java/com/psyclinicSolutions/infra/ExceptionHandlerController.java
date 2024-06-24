@@ -116,4 +116,18 @@ public class ExceptionHandlerController {
 
         return ResponseEntity.status(status).body(error);
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<StandardException> handleIllegalArgumentException(IllegalArgumentException exception, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+
+        StandardException error = new StandardException();
+        error.setTimestamp(Instant.now());
+        error.setStatus(status.value());
+        error.setError("IllegalArgumentException");
+        error.setMessage(exception.getMessage());
+        error.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(status).body(error);
+    }
 }

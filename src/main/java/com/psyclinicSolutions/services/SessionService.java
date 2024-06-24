@@ -19,9 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class SessionService {
@@ -54,14 +57,29 @@ public class SessionService {
         return new SessionDTO(entity);
     }
 
-    @Transactional
     public SessionDTO insert(SessionDTO data) {
         Session entity = new Session();
         dataToSession(data, entity);
+
+        UUID therapistId = entity.getTherapist().getId();
+        Instant newSessionStart = entity.getSessionDate();
+        Instant newSessionEnd = newSessionStart.plusSeconds(entity.getSessionDuration() * 60);
+
+        List<Session> therapistSessions = repository.findAll().stream()
+                .filter(s -> s.getTherapist().getId().equals(therapistId))
+                .toList();
+
+        if (isSessionOverlapping(newSessionStart, newSessionEnd, therapistSessions)) {
+            throw new IllegalArgumentException("O terapeuta já possui uma sessão no intervalo de tempo especificado.");
+        }
+
         entity = repository.save(entity);
 
         return new SessionDTO(entity);
     }
+
+
+
     @Transactional
     public SessionDTO update(UUID id, SessionDTO data) {
         try{
@@ -70,7 +88,7 @@ public class SessionService {
             obj = repository.save(obj);
             return new SessionDTO(obj);
         } catch (EntityNotFoundException exception){
-            throw new DataNotFoundException("TSessão não encontrada.");
+            throw new DataNotFoundException("Sessão não encontrada.");
         }
     }
 
@@ -106,8 +124,16 @@ public class SessionService {
        entity.setAccountDate(data.accountDate());
     }
 
+    private boolean isSessionOverlapping(Instant newSessionStart, Instant newSessionEnd, List<Session> therapistSessions) {
+        for (Session existingSession : therapistSessions) {
+            Instant existingSessionStart = existingSession.getSessionDate();
+            Instant existingSessionEnd = existingSessionStart.plusSeconds(existingSession.getSessionDuration() * 60);
 
-
-
+            if (newSessionStart.isBefore(existingSessionEnd) && newSessionEnd.isAfter(existingSessionStart)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
