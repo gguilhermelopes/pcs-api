@@ -10,6 +10,7 @@ import com.psyclinicSolutions.services.helpers.FetchObjects;
 import com.psyclinicSolutions.repositories.PatientRepository;
 import com.psyclinicSolutions.repositories.SessionRepository;
 import com.psyclinicSolutions.repositories.TherapistRepository;
+import com.psyclinicSolutions.services.helpers.SessionValidator;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,11 +21,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.time.Instant;
+import java.time.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class SessionService {
@@ -38,6 +38,12 @@ public class SessionService {
     private PatientRepository patientRepository;
     @Autowired
     private FetchObjects fo;
+    @Autowired
+    private SessionValidator sessionValidator;
+
+    private final ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
+    private final LocalTime startTime = LocalTime.parse("06:59:59");
+    private final LocalTime endTime = LocalTime.parse("21:00:00");
 
     @Transactional(readOnly = true)
     public List<SessionDTO> findAll() {
@@ -64,13 +70,16 @@ public class SessionService {
         UUID therapistId = entity.getTherapist().getId();
         Instant newSessionStart = entity.getSessionDate();
         Instant newSessionEnd = newSessionStart.plusSeconds(entity.getSessionDuration() * 60);
-
         List<Session> therapistSessions = repository.findAll().stream()
                 .filter(s -> s.getTherapist().getId().equals(therapistId))
                 .toList();
 
-        if (isSessionOverlapping(newSessionStart, newSessionEnd, therapistSessions)) {
-            throw new IllegalArgumentException("O terapeuta já possui uma sessão no intervalo de tempo especificado.");
+        if (sessionValidator.isSessionOverlapping(newSessionStart, newSessionEnd, therapistSessions, null)) {
+            throw new IllegalArgumentException("O terapeuta já estará em sessão no dia e horário especificado.");
+        }
+
+        if(sessionValidator.isSessionOffWorkingHours(newSessionStart, newSessionEnd, startTime, endTime, zoneId)){
+            throw new IllegalArgumentException("A sessão não pode ser criada fora das horas de trabalho.");
         }
 
         entity = repository.save(entity);
@@ -83,10 +92,27 @@ public class SessionService {
     @Transactional
     public SessionDTO update(UUID id, SessionDTO data) {
         try{
-            Session obj = repository.getReferenceById(id);
-            dataToSession(data, obj);
-            obj = repository.save(obj);
-            return new SessionDTO(obj);
+            Session entity = repository.getReferenceById(id);
+            dataToSession(data, entity);
+
+            UUID therapistId = entity.getTherapist().getId();
+            Instant newSessionStart = entity.getSessionDate();
+            Instant newSessionEnd = newSessionStart.plusSeconds(entity.getSessionDuration() * 60);
+            List<Session> therapistSessions = repository.findAll().stream()
+                    .filter(s -> s.getTherapist().getId().equals(therapistId))
+                    .toList();
+
+            if (sessionValidator.isSessionOverlapping(newSessionStart, newSessionEnd, therapistSessions, entity)) {
+                throw new IllegalArgumentException("O terapeuta já estará em sessão no dia e horário especificado.");
+            }
+
+            if(sessionValidator.isSessionOffWorkingHours(newSessionStart, newSessionEnd, startTime, endTime, zoneId)){
+                throw new IllegalArgumentException("A sessão não pode ser criada fora das horas de trabalho.");
+            }
+
+
+            entity = repository.save(entity);
+            return new SessionDTO(entity);
         } catch (EntityNotFoundException exception){
             throw new DataNotFoundException("Sessão não encontrada.");
         }
@@ -123,17 +149,4 @@ public class SessionService {
        entity.setIsAccounted(data.isAccounted());
        entity.setAccountDate(data.accountDate());
     }
-
-    private boolean isSessionOverlapping(Instant newSessionStart, Instant newSessionEnd, List<Session> therapistSessions) {
-        for (Session existingSession : therapistSessions) {
-            Instant existingSessionStart = existingSession.getSessionDate();
-            Instant existingSessionEnd = existingSessionStart.plusSeconds(existingSession.getSessionDuration() * 60);
-
-            if (newSessionStart.isBefore(existingSessionEnd) && newSessionEnd.isAfter(existingSessionStart)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 }
