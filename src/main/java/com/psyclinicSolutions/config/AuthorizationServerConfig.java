@@ -5,7 +5,6 @@ import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
-import java.util.List;
 import java.util.UUID;
 
 import com.psyclinicSolutions.config.customgrant.CustomPasswordAuthenticationConverter;
@@ -21,7 +20,6 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.OAuth2Token;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
@@ -155,12 +153,13 @@ public class AuthorizationServerConfig {
         return context -> {
             OAuth2ClientAuthenticationToken principal = context.getPrincipal();
             CustomUserAuthorities user = (CustomUserAuthorities) principal.getDetails();
-            String authority = user.getAuthorities().stream().findFirst().get().getAuthority();
+            String authority = user.authorities().stream().findFirst().get().getAuthority();
+
             if (context.getTokenType().getValue().equals("access_token")) {
                 // @formatter:off
                 context.getClaims()
                         .claim("authority", authority)
-                        .claim("username", user.getUsername());
+                        .claim("username", user.username());
                 // @formatter:on
             }
         };

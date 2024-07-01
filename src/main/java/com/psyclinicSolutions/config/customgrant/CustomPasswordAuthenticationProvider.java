@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,9 +40,6 @@ public class CustomPasswordAuthenticationProvider implements AuthenticationProvi
     private final UserDetailsService userDetailsService;
     private final OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator;
     private final PasswordEncoder passwordEncoder;
-    private String username = "";
-    private String password = "";
-    private Set<String> authorizedScopes = new HashSet<>();
 
     public CustomPasswordAuthenticationProvider(OAuth2AuthorizationService authorizationService,
                                                 OAuth2TokenGenerator<? extends OAuth2Token> tokenGenerator,
@@ -63,8 +61,8 @@ public class CustomPasswordAuthenticationProvider implements AuthenticationProvi
         CustomPasswordAuthenticationToken customPasswordAuthenticationToken = (CustomPasswordAuthenticationToken) authentication;
         OAuth2ClientAuthenticationToken clientPrincipal = getAuthenticatedClientElseThrowInvalidClient(customPasswordAuthenticationToken);
         RegisteredClient registeredClient = clientPrincipal.getRegisteredClient();
-        username = customPasswordAuthenticationToken.getUsername();
-        password = customPasswordAuthenticationToken.getPassword();
+        String username = customPasswordAuthenticationToken.getUsername();
+        String password = customPasswordAuthenticationToken.getPassword();
 
         UserDetails user = null;
         try {
@@ -77,8 +75,8 @@ public class CustomPasswordAuthenticationProvider implements AuthenticationProvi
             throw new OAuth2AuthenticationException("Invalid credentials");
         }
 
-        authorizedScopes = user.getAuthorities().stream()
-                .map(scope -> scope.getAuthority())
+        Set<String> authorizedScopes = user.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
                 .filter(scope -> registeredClient.getScopes().contains(scope))
                 .collect(Collectors.toSet());
 
@@ -87,9 +85,9 @@ public class CustomPasswordAuthenticationProvider implements AuthenticationProvi
         CustomUserAuthorities customPasswordUser = new CustomUserAuthorities(username, user.getAuthorities());
         oAuth2ClientAuthenticationToken.setDetails(customPasswordUser);
 
-        var newcontext = SecurityContextHolder.createEmptyContext();
-        newcontext.setAuthentication(oAuth2ClientAuthenticationToken);
-        SecurityContextHolder.setContext(newcontext);
+        var newContext = SecurityContextHolder.createEmptyContext();
+        newContext.setAuthentication(oAuth2ClientAuthenticationToken);
+        SecurityContextHolder.setContext(newContext);
 
         //-----------TOKEN BUILDERS----------
         DefaultOAuth2TokenContext.Builder tokenContextBuilder = DefaultOAuth2TokenContext.builder()
