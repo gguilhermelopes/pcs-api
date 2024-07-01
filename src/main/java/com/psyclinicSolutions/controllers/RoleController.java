@@ -23,8 +23,8 @@ public class RoleController {
 
     @GetMapping
     public ResponseEntity<List<RoleDTO>> findAll(){
-        List<RoleDTO> employeeList = service.findAll();
-        return ResponseEntity.ok(employeeList);
+        List<RoleDTO> list = service.findAll();
+        return ResponseEntity.ok(list);
     }
 
     @GetMapping(value = "/paged")

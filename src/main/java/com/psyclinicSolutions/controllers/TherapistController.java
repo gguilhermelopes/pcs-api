@@ -24,8 +24,8 @@ public class TherapistController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping
     public ResponseEntity<List<TherapistDTO>> findAll(){
-        List<TherapistDTO> employeeList = service.findAll();
-        return ResponseEntity.ok(employeeList);
+        List<TherapistDTO> list = service.findAll();
+        return ResponseEntity.ok(list);
     }
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping(value = "/paged")

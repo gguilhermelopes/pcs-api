@@ -25,8 +25,8 @@ public class EmployeeController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping
     public ResponseEntity<List<EmployeeDTO>> findAll(){
-        List<EmployeeDTO> employeeList = service.findAll();
-        return ResponseEntity.ok(employeeList);
+        List<EmployeeDTO> list = service.findAll();
+        return ResponseEntity.ok(list);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")

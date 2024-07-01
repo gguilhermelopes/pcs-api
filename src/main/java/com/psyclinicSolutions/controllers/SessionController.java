@@ -25,8 +25,8 @@ public class SessionController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping
     public ResponseEntity<List<SessionDTO>> findAll(){
-        List<SessionDTO> employeeList = service.findAll();
-        return ResponseEntity.ok(employeeList);
+        List<SessionDTO> list = service.findAll();
+        return ResponseEntity.ok(list);
     }
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping(value = "/paged")

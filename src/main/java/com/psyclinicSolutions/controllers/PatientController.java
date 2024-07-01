@@ -25,8 +25,8 @@ public class PatientController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping
     public ResponseEntity<List<PatientDTO>> findAll(){
-        List<PatientDTO> employeeList = service.findAll();
-        return ResponseEntity.ok(employeeList);
+        List<PatientDTO> list = service.findAll();
+        return ResponseEntity.ok(list);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")

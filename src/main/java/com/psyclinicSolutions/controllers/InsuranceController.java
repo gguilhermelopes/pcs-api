@@ -25,8 +25,8 @@ public class InsuranceController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping
     public ResponseEntity<List<InsuranceDTO>> findAll(){
-        List<InsuranceDTO> employeeList = service.findAll();
-        return ResponseEntity.ok(employeeList);
+        List<InsuranceDTO> list = service.findAll();
+        return ResponseEntity.ok(list);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")

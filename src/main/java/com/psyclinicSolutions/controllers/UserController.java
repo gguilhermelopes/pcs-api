@@ -25,8 +25,8 @@ public class UserController {
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll(){
-        List<UserDTO> employeeList = service.findAll();
-        return ResponseEntity.ok(employeeList);
+        List<UserDTO> list = service.findAll();
+        return ResponseEntity.ok(list);
     }
     @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @GetMapping(value = "/paged")
