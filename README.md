@@ -26,8 +26,6 @@ git clone https://github.com/gguilhermelopes/pcs-api.git
 
 2. Instalar as dependências com o Maven.
 
-3. Instalar o [MySQL](https://dev.mysql.com/doc/refman/8.1/en/installing.html).
-
 ## Configurações
 
 1. Em application.properites, utilizar: `spring.profiles.active=test`, isso ativará o modo de teste e utilizará o banco de dados H2.
