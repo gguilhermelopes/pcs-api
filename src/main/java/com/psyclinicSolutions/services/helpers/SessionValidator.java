@@ -32,4 +32,17 @@ public class SessionValidator {
 
         return sessionStartTime.isBefore(startWorkingHours) || sessionEndTime.isAfter(endWorkingHours);
     }
+
+    public boolean isPaidCheckedAndPaymentDateNotNull(Session session) {
+        return session.getIsPaid() && session.getPaymentDate() != null;
+    }
+
+    public boolean isAccountedCheckedAndAccountDateNotNull(Session session) {
+        return session.getIsAccounted() && session.getAccountDate() != null;
+    }
+
+    public boolean isAuthorizedCheckedAndAuthorizationDateOrTokenNotNull(Session session) {
+        return session.getIsAuthorized() && session.getAuthorizationDate() != null && session.getToken() != null;
+    }
+
 }

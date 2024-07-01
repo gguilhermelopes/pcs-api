@@ -67,20 +67,7 @@ public class SessionService {
         Session entity = new Session();
         dataToSession(data, entity);
 
-        UUID therapistId = entity.getTherapist().getId();
-        Instant newSessionStart = entity.getSessionDate();
-        Instant newSessionEnd = newSessionStart.plusSeconds(entity.getSessionDuration() * 60);
-        List<Session> therapistSessions = repository.findAll().stream()
-                .filter(s -> s.getTherapist().getId().equals(therapistId))
-                .toList();
-
-        if (sessionValidator.isSessionOverlapping(newSessionStart, newSessionEnd, therapistSessions, null)) {
-            throw new IllegalArgumentException("O terapeuta já estará em sessão no dia e horário especificado.");
-        }
-
-        if(sessionValidator.isSessionOffWorkingHours(newSessionStart, newSessionEnd, startTime, endTime, zoneId)){
-            throw new IllegalArgumentException("A sessão não pode ser criada fora das horas de trabalho.");
-        }
+        validateSession(entity, null);
 
         entity = repository.save(entity);
 
@@ -95,20 +82,7 @@ public class SessionService {
             Session entity = repository.getReferenceById(id);
             dataToSession(data, entity);
 
-            UUID therapistId = entity.getTherapist().getId();
-            Instant newSessionStart = entity.getSessionDate();
-            Instant newSessionEnd = newSessionStart.plusSeconds(entity.getSessionDuration() * 60);
-            List<Session> therapistSessions = repository.findAll().stream()
-                    .filter(s -> s.getTherapist().getId().equals(therapistId))
-                    .toList();
-
-            if (sessionValidator.isSessionOverlapping(newSessionStart, newSessionEnd, therapistSessions, entity)) {
-                throw new IllegalArgumentException("O terapeuta já estará em sessão no dia e horário especificado.");
-            }
-
-            if(sessionValidator.isSessionOffWorkingHours(newSessionStart, newSessionEnd, startTime, endTime, zoneId)){
-                throw new IllegalArgumentException("A sessão não pode ser criada fora das horas de trabalho.");
-            }
+            validateSession(entity, entity);
 
 
             entity = repository.save(entity);
@@ -148,5 +122,34 @@ public class SessionService {
        entity.setPaymentDate(data.paymentDate());
        entity.setIsAccounted(data.isAccounted());
        entity.setAccountDate(data.accountDate());
+    }
+
+    private void validateSession(Session entity, Session sessionToIgnore) {
+        UUID therapistId = entity.getTherapist().getId();
+        Instant newSessionStart = entity.getSessionDate();
+        Instant newSessionEnd = newSessionStart.plusSeconds(entity.getSessionDuration() * 60);
+        List<Session> therapistSessions = repository.findAll().stream()
+                .filter(s -> s.getTherapist().getId().equals(therapistId))
+                .toList();
+
+        if (sessionValidator.isSessionOverlapping(newSessionStart, newSessionEnd, therapistSessions, sessionToIgnore)) {
+            throw new IllegalArgumentException("O terapeuta já estará em sessão no dia e horário especificado.");
+        }
+
+        if (sessionValidator.isSessionOffWorkingHours(newSessionStart, newSessionEnd, startTime, endTime, zoneId)) {
+            throw new IllegalArgumentException("A sessão não pode ser criada fora das horas de trabalho.");
+        }
+
+        if (entity.getIsPaid() && !sessionValidator.isPaidCheckedAndPaymentDateNotNull(entity)) {
+            throw new IllegalArgumentException("Insira a data de pagamento.");
+        }
+
+        if (entity.getIsAccounted() && !sessionValidator.isAccountedCheckedAndAccountDateNotNull(entity)) {
+            throw new IllegalArgumentException("Insira a data da contabilidade do pagamento.");
+        }
+
+        if (entity.getIsAuthorized() && !sessionValidator.isAuthorizedCheckedAndAuthorizationDateOrTokenNotNull(entity)) {
+            throw new IllegalArgumentException("Insira a data de autorização e/ou o token.");
+        }
     }
 }
